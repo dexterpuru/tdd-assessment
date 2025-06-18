@@ -11,3 +11,8 @@ class TestStringCalculator:
         calculator = StringCalculator()
         assert calculator.add("1") == 1
         assert calculator.add("5") == 5
+    
+    def test_two_numbers_comma_separated(self):
+        calculator = StringCalculator()
+        assert calculator.add("10, 5") == 15
+        assert calculator.add("10, 20") == 30
