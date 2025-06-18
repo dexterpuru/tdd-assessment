@@ -6,3 +6,8 @@ class TestStringCalculator:
         calculator = StringCalculator()
         result = calculator.add("")
         assert result == 0
+    
+    def test_single_number_returns_itself(self):
+        calculator = StringCalculator()
+        assert calculator.add("1") == 1
+        assert calculator.add("5") == 5
