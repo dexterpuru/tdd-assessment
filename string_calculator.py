@@ -20,15 +20,25 @@ class StringCalculator:
         
         delimiter_pattern, number_string = self._parse_input(numbers)
         number_list = self._split_by_delimiters(number_string, delimiter_pattern)
-        
-        integer_list = [int(num.strip()) for num in number_list if num.strip()]
+        integer_list = self._convert_to_integers(number_list)
+        self._validate_no_negatives(integer_list)
+        return sum(integer_list)
+    
+    def _convert_to_integers(self, number_list: list[str]) -> list[int]:
+        """
+        Convert list of string numbers to integers, filtering out empty strings.
+        """
+        return [int(num.strip()) for num in number_list if num.strip()]
+
+    def _validate_no_negatives(self, integer_list: list[int]) -> None:
+        """
+        Raise ValueError if any negative numbers are found in the list.
+        """
         negative_nums = [num for num in integer_list if num < 0]
         
         if negative_nums:
             negative_str = ', '.join(map(str, negative_nums))
             raise ValueError(f"negative numbers not allowed: {negative_str}")
-        
-        return sum(integer_list)
     
     def _parse_input(self, numbers: str) -> tuple[str, str]:
         """
