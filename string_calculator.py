@@ -18,18 +18,26 @@ class StringCalculator:
         delimiter_pattern, number_string = None, None
         
         
+        delimiter_pattern, number_string = self._parse_input(numbers)
+        number_list = self._split_by_delimiters(number_string, delimiter_pattern)
+        return self._add_numbers(number_list)
+    
+    def _parse_input(self, numbers: str) -> tuple[str, str]:
+        """
+        Parse input string to extract custom delimiter pattern and number string.
+        """
         if numbers.startswith('//'):
             lines = numbers.split('\n', 1)
-            delimiter_pattern = lines[0][2:] # Remove '//'
-            number_string = lines[1]
-        else:
-            delimiter_pattern = ',|\n'
-            number_string = numbers
-        
+            custom_delimiter = lines[0][2:] # Remove '//'
+            return custom_delimiter, lines[1]
+        return ',|\n', numbers # Default delimiters
+    
+    def _split_by_delimiters(self, text: str, delimiter_pattern: str) -> list[str]:
+        """
+        Split text into list of strings using the specified delimiter pattern.
+        """
         escaped_pattern = re.escape(delimiter_pattern).replace('\\|', '|')
-        number_list = re.split(f'[{escaped_pattern}]', number_string)
-        
-        return self._add_numbers(number_list)
+        return re.split(f'[{escaped_pattern}]', text)
     
     def _add_numbers(self, number_strings: list[str]) -> int:
         """
