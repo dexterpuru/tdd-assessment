@@ -22,3 +22,9 @@ class TestStringCalculator:
         assert calculator.add("1, 2, 3, 4, 5") == 15
         assert calculator.add("10, 20, 30, 40, 50") == 150
         assert calculator.add("1, 2, 3, 4, 5, 6, 7, 8, 9, 10") == 55
+    
+    def test_new_line_separator(self):
+        calculator = StringCalculator()
+        assert calculator.add("1\n2,3") == 6
+        assert calculator.add("10\n20,30\n40,50") == 150
+        assert calculator.add("1,2\n3,4\n5,6\n7,8\n9,10") == 55
