@@ -36,3 +36,27 @@ class TestStringCalculator:
         assert calculator.add("//;\n1;2;3;4;5") == 15
         assert calculator.add("//;\n10;20;30;40;50") == 150
         assert calculator.add("//|\n1|2|3|4|5") == 15
+    
+    def test_negative_numbers_not_allowed(self):
+        calculator = StringCalculator()
+        
+        with pytest.raises(ValueError, match="negative numbers not allowed: -1"):
+            calculator.add("1,-1,2")
+        
+        with pytest.raises(ValueError, match="negative numbers not allowed: -1, -3"):
+            calculator.add("1,-1,2,-3")
+        
+        with pytest.raises(ValueError, match="negative numbers not allowed: -10, -20"):
+            calculator.add("-10, -20, 1, 40")
+
+    def test_negative_with_custom_delimiter(self):
+        calculator = StringCalculator()
+        
+        with pytest.raises(ValueError, match="negative numbers not allowed: -2"):
+            calculator.add("//;\n1;-2;3")
+        
+        with pytest.raises(ValueError, match="negative numbers not allowed: -2"):
+            calculator.add("//;\n1;-2;3")
+        
+        with pytest.raises(ValueError, match="negative numbers not allowed: -1"):
+            calculator.add("//|\n6|10|-1")
