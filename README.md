@@ -9,8 +9,6 @@ This project demonstrates Test-Driven Development (TDD) practices through the im
 
 ## Setup
 
-### 1. Verify Python 3.11 Installation
-
 ```bash
 python3.11 --version
 # Should output: Python 3.11.x
