@@ -11,7 +11,9 @@ class StringCalculator:
         """
         if not numbers:
             return 0
-        return self._add_numbers(numbers.split(','))
+        
+        normalized = numbers.replace('\n', ',')
+        return self._add_numbers(normalized.split(','))
     
     def _add_numbers(self, number_strings: list[str]) -> int:
         """
