@@ -1,23 +1,37 @@
 import re
 
 class StringCalculator:
+    """
+        A calculator that sums numbers from delimited strings.
+        
+        Supports:
+        - Empty strings (returns 0)
+        - Single numbers
+        - Comma-separated numbers
+        - Newline-separated numbers  
+        - Custom delimiters in format: //[delimiter]\n[numbers]
+        - Validation against negative numbers
+    """
+    
+    DEFAULT_DELIMITERS = ',|\n'
+    CUSTOM_DELIMITER_PREFIX = '//'
+    
     def add(self, numbers: str) -> int:
         """
-        Calculate sum of comma-separated numbers in a string.
+        Calculate the sum of numbers in a delimited string.
         
         Args:
-            numbers: String containing comma-separated numbers
+            numbers: String containing delimited numbers
             
         Returns:
-            Sum of all numbers
+            Sum of all valid numbers
+            
+        Raises:
+            ValueError: If any negative numbers are found
         """
         if not numbers:
             return 0
-        
-        
-        delimiter_pattern, number_string = None, None
-        
-        
+
         delimiter_pattern, number_string = self._parse_input(numbers)
         number_list = self._split_by_delimiters(number_string, delimiter_pattern)
         integer_list = self._convert_to_integers(number_list)
@@ -44,15 +58,20 @@ class StringCalculator:
         """
         Parse input string to extract custom delimiter pattern and number string.
         """
-        if numbers.startswith('//'):
+        if numbers.startswith(self.CUSTOM_DELIMITER_PREFIX):
             lines = numbers.split('\n', 1)
-            custom_delimiter = lines[0][2:] # Remove '//'
-            return custom_delimiter, lines[1]
-        return ',|\n', numbers # Default delimiters
+            custom_delimiter = lines[0][len(self.CUSTOM_DELIMITER_PREFIX):] # Remove '//'
+            return custom_delimiter, lines[1] if len(lines) > 1 else ''
+        return self.DEFAULT_DELIMITERS, numbers # Default delimiters
     
     def _split_by_delimiters(self, text: str, delimiter_pattern: str) -> list[str]:
         """
         Split text into list of strings using the specified delimiter pattern.
         """
-        escaped_pattern = re.escape(delimiter_pattern).replace('\\|', '|')
-        return re.split(f'[{escaped_pattern}]', text)
+        if '|' in delimiter_pattern and delimiter_pattern != self.DEFAULT_DELIMITERS:
+            # Handle custom delimiters - escape for regex
+            escaped = re.escape(delimiter_pattern)
+            return re.split(f'[{escaped}]', text)
+        else:
+            # Use character class for multiple delimiters
+            return re.split(f'[{delimiter_pattern}]', text)
