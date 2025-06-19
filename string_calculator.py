@@ -20,7 +20,15 @@ class StringCalculator:
         
         delimiter_pattern, number_string = self._parse_input(numbers)
         number_list = self._split_by_delimiters(number_string, delimiter_pattern)
-        return self._add_numbers(number_list)
+        
+        integer_list = [int(num.strip()) for num in number_list if num.strip()]
+        negative_nums = [num for num in integer_list if num < 0]
+        
+        if negative_nums:
+            negative_str = ', '.join(map(str, negative_nums))
+            raise ValueError(f"negative numbers not allowed: {negative_str}")
+        
+        return sum(integer_list)
     
     def _parse_input(self, numbers: str) -> tuple[str, str]:
         """
@@ -38,9 +46,3 @@ class StringCalculator:
         """
         escaped_pattern = re.escape(delimiter_pattern).replace('\\|', '|')
         return re.split(f'[{escaped_pattern}]', text)
-    
-    def _add_numbers(self, number_strings: list[str]) -> int:
-        """
-        Convert list of numbers to integers and return their sum.
-        """
-        return sum(int(num.strip()) for num in number_strings)
